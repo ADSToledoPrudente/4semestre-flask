@@ -41,4 +41,4 @@ Acesso
 ## Requisitos
 
 ├── Python 3.7+
-├── Pacotes da seção ```bash Instalação```
+├── Pacotes da seção ```Instalação```
