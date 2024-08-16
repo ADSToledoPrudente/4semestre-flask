@@ -13,13 +13,13 @@ O objetivo deste projeto é desenvolver uma aplicação web utilizando o framewo
 ## Estrutura do Projeto
 
 ```bash
-my_flask_project/
+4semestre_flask/
 │
-├── venv/              # Ambiente virtual
 ├── app.py             # Arquivo principal do Flask
 ├── templates/         # Diretório para arquivos HTML
 │   └── index.html     # Template principal
-└── static/            # Diretório para arquivos estáticos (CSS, JS, imagens, etc.)
+├── static/            # Diretório para arquivos estáticos (CSS, JS, imagens, etc.)
+└── routes/            # Diretório para as rotas
 ```
 
 ## Configuração e Execução
@@ -31,9 +31,9 @@ Criação
 Ativação
     ├── venv\Scripts\Activate
 Instalação
-    ├── pip install flask
+    ├── pip install flask wheel mysql-connector mysqlclient SQLAlchemy flask-login Flask-SQLAlchemy
 Execução
-    ├── python app.py
+    ├── flask run
 Acesso
     ├── http://127.0.0.1:5000/
 ```
@@ -41,4 +41,4 @@ Acesso
 ## Requisitos
 
 ├── Python 3.7+
-├── Flask
+├── Pacotes da seção ```bash Instalação```

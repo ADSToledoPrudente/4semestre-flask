@@ -1,4 +1,6 @@
-from flask import Blueprint, request, jsonify # type: ignore
+import datetime
+from flask import Blueprint, redirect, request, jsonify, url_for
+from flask_login import login_required # type: ignore
 from app import db
 from models import Perguntas
 
@@ -43,3 +45,17 @@ def deletarPergunta(pergunta_id):
     db.session.delete(question)
     db.session.commit()
     return '', 204
+
+@perguntas_bp.route('/novaPergunta', methods=['POST'])
+@login_required
+def novaPergunta():
+    conteudo = request.form['conteudo']
+    anuncioId = request.form['anuncioId']
+    usuarioId = request.form['usuarioId']
+    
+    nova_pergunta = Perguntas(conteudo=conteudo, data_criacao=datetime.datetime.now(), usuario_id=usuarioId, anuncio_id=anuncioId)
+    
+    db.session.add(nova_pergunta)
+    db.session.commit()
+    
+    return redirect(url_for('anuncio.visualizarAnuncio', anuncioId=anuncioId))
