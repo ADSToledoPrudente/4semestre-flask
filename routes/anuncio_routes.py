@@ -1,6 +1,6 @@
-from flask import Blueprint, redirect, render_template, request, jsonify, url_for # type: ignore
-from app import db, login_required, current_user
-from models import Anuncio, Categoria, Perguntas
+from flask import Blueprint, redirect, render_template, request, jsonify, url_for
+from app import db
+from models import Anuncio, Categoria, Favoritos, Perguntas
 
 anuncio_bp = Blueprint('anuncio', __name__)
 
@@ -48,25 +48,37 @@ def anuncios():
 
 @anuncio_bp.route("/todosanuncios")
 def recuperarTodos():
+    from flask_login import current_user
+
     anuncios = Anuncio.query.all()
-    anuncios_dict = [
-        {
+    anuncios_favoritados = []
+    anuncios_nao_favoritados = []
+
+    for anuncio in anuncios:
+        favoritado = Favoritos.query.filter_by(usuario_id=current_user.id, anuncio_id=anuncio.id).first() is not None
+        anuncio_dict = {
             'id': anuncio.id,
             'titulo': anuncio.titulo,
-            'descricao': anuncio.descricao,
             'preco': anuncio.preco,
-            'status': anuncio.status,
             'categoria': anuncio.categoria.nome,
-            'categoriaId': anuncio.categoria.id
-        } for anuncio in anuncios
-    ]
+            'favoritado': favoritado
+        }
+
+        if favoritado:
+            anuncios_favoritados.append(anuncio_dict)
+        else:
+            anuncios_nao_favoritados.append(anuncio_dict)
+
+    anuncios_com_favoritos = anuncios_favoritados + anuncios_nao_favoritados
     
-    return jsonify(anuncios_dict)
+    return jsonify(anuncios_com_favoritos)
     
 @anuncio_bp.route('/gerenciarAnuncio', defaults={'anuncioId': None}, methods=['GET', 'POST'])
 @anuncio_bp.route('/gerenciarAnuncio/<int:anuncioId>', methods=['GET', 'POST', 'PUT'])
-@login_required
 def gerenciarAnuncio(anuncioId):
+    from flask_login import login_required
+    login_required()
+
     if request.method == 'POST':
         
         if request.form.get('_method') == 'PUT' and anuncioId:
@@ -85,10 +97,10 @@ def gerenciarAnuncio(anuncioId):
         else:
             
             novoAnuncio = Anuncio(
-                titulo = request.form['titulo'],
-                descricao = request.form['descricao'],
-                preco = request.form['preco'],
-                categoria_id = request.form['categoriaId'],
+                titulo=request.form['titulo'],
+                descricao=request.form['descricao'],
+                preco=request.form['preco'],
+                categoria_id=request.form['categoriaId'],
             )
             
             db.session.add(novoAnuncio)
@@ -100,12 +112,13 @@ def gerenciarAnuncio(anuncioId):
         anuncio = Anuncio.query.get_or_404(anuncioId)
         return render_template('anuncios/gerenciar_anuncio.html', anuncio=anuncio, categorias=categorias, edit=True)
     else:
-        print('aqui 4')
         return render_template('anuncios/gerenciar_anuncio.html', anuncio=None, categorias=categorias, edit=False)
     
 @anuncio_bp.route('/visualizarAnuncio/<int:anuncioId>', methods=['GET', 'POST', 'PUT'])
 def visualizarAnuncio(anuncioId):
+    from flask_login import current_user
+
     categorias = Categoria.query.all()
     anuncio = Anuncio.query.get_or_404(anuncioId)
-    perguntas = Perguntas.query.filter_by(anuncio_id = anuncioId).order_by(Perguntas.data_criacao.desc())
+    perguntas = Perguntas.query.filter_by(anuncio_id=anuncioId).order_by(Perguntas.data_criacao.desc())
     return render_template('anuncios/visualizar_anuncio.html', anuncio=anuncio, usuario=current_user, perguntas=perguntas, categorias=categorias, edit=True)

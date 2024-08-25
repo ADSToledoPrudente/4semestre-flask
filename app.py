@@ -1,7 +1,8 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask import render_template
-from flask_login import LoginManager
+from flask_login import LoginManager, login_user, login_required, logout_user, login_manager
+from flask import Blueprint, redirect, render_template, request, jsonify, url_for # type: ignore
 
 app = Flask(__name__)
 
@@ -12,8 +13,8 @@ db = SQLAlchemy(app)
 
 app.secret_key = ''
 login_manager = LoginManager()
-login_manager.init_app(app)
 login_manager.login_view = '/login'
+login_manager.init_app(app)
 
 from routes.usuario_routes import usuario_bp
 from routes.anuncio_routes import anuncio_bp
@@ -34,7 +35,6 @@ app.register_blueprint(respostas_bp)
 app.register_blueprint(usuario_bp)
 
 @app.route("/")
-@app.route("")
 def index():
     return render_template('index.html')
 

@@ -1,5 +1,5 @@
 from flask import Blueprint, redirect, render_template, request, jsonify, url_for # type: ignore
-from app import db, login_user, logout_user, login_manager
+from app import db, login_user, login_required, logout_user, login_manager
 from models import Usuario
 
 usuario_bp = Blueprint('usuario', __name__)
@@ -59,6 +59,7 @@ def recuperarTodos():
     
 @usuario_bp.route('/gerenciarUsuario', defaults={'usuarioId': None}, methods=['GET', 'POST'])
 @usuario_bp.route('/gerenciarUsuario/<int:usuarioId>', methods=['GET', 'POST', 'PUT'])
+@login_required
 def gerenciarUsuario(usuarioId):
     if request.method == 'POST':
         if request.form.get('_method') == 'PUT' and usuarioId:
