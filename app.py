@@ -6,12 +6,12 @@ from flask import Blueprint, redirect, render_template, request, jsonify, url_fo
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://4_flaskuser:qwe123@bd.iron.hostazul.com.br:4406/4_flaskdb'
+app.config['SQLALCHEMY_DATABASE_URI'] = ''
 app.config['SQLALCHEMY_ECHO'] = True
 
 db = SQLAlchemy(app)
 
-app.secret_key = 'chave super hiper secreta'
+app.secret_key = ''
 login_manager = LoginManager()
 login_manager.login_view = '/login'
 login_manager.init_app(app)
