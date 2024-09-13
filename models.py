@@ -28,14 +28,14 @@ class Usuario(db.Model):
     senha = db.Column(db.String(100), nullable=False)
     endereco = db.Column(db.String(200))
     telefone = db.Column(db.String(20))
-    tipo = db.Column(db.Integer)  # 1 - comprador ou 2 - vendedor
+    tipo = db.Column(db.Integer)
 
 class Anuncio(db.Model):
     def __init__(self, titulo, descricao, preco, categoria_id, status=1):
         self.titulo = titulo
         self.descricao = descricao
         self.preco = preco
-        self.data_criacao = datetime.datetime.now()  # Define a data de criação automaticamente
+        self.data_criacao = datetime.datetime.now()
         self.status = status
         self.categoria_id = categoria_id
         

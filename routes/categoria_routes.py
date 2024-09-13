@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify # type: ignore
+from flask import Blueprint, request, jsonify
 from app import db
 from models import Categoria
 

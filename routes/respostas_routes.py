@@ -1,6 +1,6 @@
 import datetime
 from flask import Blueprint, redirect, request, jsonify, url_for
-from flask_login import current_user, login_required # type: ignore
+from flask_login import current_user, login_required
 from app import db
 from models import Respostas
 

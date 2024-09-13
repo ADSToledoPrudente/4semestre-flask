@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, request, jsonify, url_for # type: ignore
+from flask import Blueprint, redirect, render_template, request, jsonify, url_for
 from app import db, login_user, login_required, logout_user, login_manager
 from models import Usuario
 

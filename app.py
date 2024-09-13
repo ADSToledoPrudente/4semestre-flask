@@ -1,8 +1,8 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask import render_template
-from flask_login import LoginManager, login_user, login_required, logout_user, login_manager
-from flask import Blueprint, redirect, render_template, request, jsonify, url_for # type: ignore
+from flask_login import LoginManager, login_manager
+from flask import render_template
 
 app = Flask(__name__)
 

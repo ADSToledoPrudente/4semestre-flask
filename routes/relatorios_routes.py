@@ -1,5 +1,4 @@
-from flask import Blueprint, request, jsonify # type: ignore
-from app import db
+from flask import Blueprint, jsonify
 from models import RelatorioCompra, RelatorioVenda
 
 relatorios_bp = Blueprint('relatorios', __name__)

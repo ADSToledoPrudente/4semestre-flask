@@ -55,7 +55,11 @@ def recuperarTodos():
     anuncios_nao_favoritados = []
 
     for anuncio in anuncios:
-        favoritado = Favoritos.query.filter_by(usuario_id=current_user.id, anuncio_id=anuncio.id).first() is not None
+        if current_user.is_authenticated:
+            favoritado = Favoritos.query.filter_by(usuario_id=current_user.id, anuncio_id=anuncio.id).first() is not None
+        else:
+            favoritado = False
+        
         anuncio_dict = {
             'id': anuncio.id,
             'titulo': anuncio.titulo,
@@ -72,12 +76,12 @@ def recuperarTodos():
     anuncios_com_favoritos = anuncios_favoritados + anuncios_nao_favoritados
     
     return jsonify(anuncios_com_favoritos)
-    
+
+from flask_login import login_required
 @anuncio_bp.route('/gerenciarAnuncio', defaults={'anuncioId': None}, methods=['GET', 'POST'])
 @anuncio_bp.route('/gerenciarAnuncio/<int:anuncioId>', methods=['GET', 'POST', 'PUT'])
+@login_required
 def gerenciarAnuncio(anuncioId):
-    from flask_login import login_required
-    login_required()
 
     if request.method == 'POST':
         
@@ -113,7 +117,7 @@ def gerenciarAnuncio(anuncioId):
         return render_template('anuncios/gerenciar_anuncio.html', anuncio=anuncio, categorias=categorias, edit=True)
     else:
         return render_template('anuncios/gerenciar_anuncio.html', anuncio=None, categorias=categorias, edit=False)
-    
+
 @anuncio_bp.route('/visualizarAnuncio/<int:anuncioId>', methods=['GET', 'POST', 'PUT'])
 def visualizarAnuncio(anuncioId):
     from flask_login import current_user
